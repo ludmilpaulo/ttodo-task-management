@@ -252,7 +252,12 @@ const TodosList = () => {
           </button>
         </div>
       ) : (
-        <p>No todos available.</p>
+        <><p>No todos available.</p><button
+            className="bg-green-500 px-8 mx-24"
+            onClick={() => setNewTodoInputVisible(true)}
+          >
+            Add Todo
+          </button></>
       )}
     </div>
   );
