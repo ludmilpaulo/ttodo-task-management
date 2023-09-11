@@ -19,7 +19,7 @@ const Sidebar: React.FC = () => {
          
           <li className="flex items-center space-x-4">
             <div>
-              <h5 className="font-semibold">Tdo App</h5>
+              <h5 className="font-semibold">Todo/Task Management</h5>
               <span>Ludmil Avelino</span>
             </div>
           </li>
