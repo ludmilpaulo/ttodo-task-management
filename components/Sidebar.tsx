@@ -9,14 +9,11 @@ type Todo = { id: number; completed?: boolean; title?: string };
 const Sidebar: React.FC = () => {
   const [showTodoList, setShowTodoList] = useState(false);
   const [showCompletedTodos, setShowCompletedTodos] = useState(false);
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
 
   return (
     <div className="flex h-screen">
       <nav className="h-screen w-64 bg-gray-800 text-white p-4">
         <ul className="space-y-4">
-         
           <li className="flex items-center space-x-4">
             <div>
               <h5 className="font-semibold">Todo/Task Management</h5>
@@ -40,7 +37,6 @@ const Sidebar: React.FC = () => {
               <span>Todo List</span>
             </Link>
           </li>
-
         </ul>
       </nav>
 

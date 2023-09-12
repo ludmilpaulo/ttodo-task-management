@@ -5,7 +5,6 @@ import { Transition } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 
-
 type Todo = { id: number; completed?: boolean; title?: string };
 type InsertTodo = { completed?: boolean; title?: string };
 
@@ -30,6 +29,9 @@ const TodosList = () => {
       .then((response) => response.json())
       .then((data) => {
         const todosArray = Array.isArray(data?.todos) ? data.todos : [];
+        if (todosArray.length == 0) {
+          setNewTodoInputVisible(!newTodoInputVisible);
+        }
         setTodos(todosArray);
       })
       .catch((error) => console.error("Error fetching todos:", error))
@@ -67,7 +69,7 @@ const TodosList = () => {
 
   const handleDeleteTodo = (id: number) => {
     setLoading(true);
-  
+
     fetch(`${apiEndPoint}/todos/${id}`, {
       method: "DELETE",
       headers: {
@@ -82,6 +84,7 @@ const TodosList = () => {
   };
 
   const handleAdd = async () => {
+    console.log("novo todo", JSON.stringify(newTodo));
     try {
       const response = await fetch(`${apiEndPoint}/todos`, {
         method: "POST",
@@ -94,11 +97,11 @@ const TodosList = () => {
 
       if (response.ok) {
         const data = await response.json();
-       
-        setNewTodo({ completed: false, title: "" });
-      
-        setTodos((prevTodos) => [...prevTodos, data.todo]);
-       
+        console.log("retrived", data);
+        //  setNewTodo({ completed: false, title: "" });
+
+        // setTodos((prevTodos) => [...prevTodos, data.todo]);
+
         setNewTodoInputVisible(false);
         fetchTodos();
       } else {
@@ -116,7 +119,6 @@ const TodosList = () => {
   };
 
   useEffect(() => {
-   
     fetchTodos();
   }, []);
 
@@ -252,12 +254,37 @@ const TodosList = () => {
           </button>
         </div>
       ) : (
-        <><p>No todos available.</p><button
-            className="bg-green-500 px-8 mx-24"
-            onClick={() => setNewTodoInputVisible(true)}
-          >
-            Add Todo
-          </button></>
+        <>
+          <p>No todos available.</p>
+          <div className="w-full h-full flex items-center justify-center bg-opacity-50 bg-gray-900 fixed top-0 left-0 z-50">
+            <div className="w-96 bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-2xl font-semibold mb-4">Add Todo</h2>
+              <input
+                type="text"
+                placeholder="Enter a new todo"
+                className="w-full p-2 mb-4 border rounded-md"
+                value={newTodo.title}
+                onChange={(e) =>
+                  setNewTodo({ ...newTodo, title: e.target.value })
+                }
+              />
+              <div className="flex justify-end">
+                <button
+                  className="px-4 py-2 mr-2 text-white bg-green-500 rounded-md hover:bg-green-600"
+                  onClick={handleAdd}
+                >
+                  Save
+                </button>
+                <button
+                  className="px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-600"
+                  onClick={() => setNewTodoInputVisible(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
